@@ -1,0 +1,84 @@
+---
+title: "Sample Dashboard"
+author: "Your Name"
+date: "Date"
+output: flexdashboard::flex_dashboard
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(DT)
+```
+
+```{r}
+mpg_manufacturer <- mpg %>%
+  group_by(manufacturer) %>%
+  summarize(avg_hwy = mean(hwy, na.rm = TRUE)) %>%
+  arrange(desc(avg_hwy))
+```
+
+# Name of first page
+
+## Name of first column on page 1
+
+### Ranking of manufacturers by highway fuel efficiency
+
+```{r}
+datatable(mpg_manufacturer)
+```
+
+## Name of second column on page 1
+
+### Visualization of various manufacturers' highway efficiencies
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = manufacturer, y = hwy)) +
+  coord_flip()
+```
+
+# Name of second page
+
+## Column 1 on page 2
+
+### The full `mpg` datatable
+
+```{r}
+datatable(mpg)
+```
+
+### Plot of `hwy` vs `displ`
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+## Column 2 on page 2
+
+### Plot of `cty` vs `class`
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = cty))
+```
+
+### Average highway mileage for each class
+
+```{r}
+class_mileage <- mpg %>%
+  group_by(class) %>%
+  summarize(avg_hwy = mean(hwy, na.rm = TRUE))
+
+datatable(class_mileage)
+```
+
+### Visualization of previous row
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+
+# Name of third page
